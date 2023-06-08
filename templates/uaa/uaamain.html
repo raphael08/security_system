@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CRMS | NIT</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+ <!-- SweetAlert2 -->
+ <link rel="stylesheet" href="{% static 'plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' %}">
+
+  <style>
+    .elv{
+      elevation: 10px
+    }
+  </style>
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <!-- /.login-logo -->
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a href="#" class="h1"><b>CRMS</b>TZ</a>
+    </div>
+
+    <!--Main contents goes here..-->
+    {% block content %}
+  
+    {% endblock content %}
+
+  </div>
+  <!-- /.card -->
+</div>
+<!-- /.login-box -->
+
+
+<!-- jQuery -->
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+<!-- autoCall js file link-->
+{% comment %} <script src="{% static 'trcProject/autocall.js' %}"></script> {% endcomment %}
+
+<!-- Bootstrap 4 -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+
+<!--message scripts...-->
+<script>
+  setTimeout(function(){
+    if($('#authmsg').length > 0){
+      $('#authmsg').remove();
+    }
+  }, 3000)
+</script>
+
+
+{% comment %} <script>
+  setInterval(function() {
+      fetch('/autCallf/')
+          .then(response => response.text())
+          .then(data => console.log(data))
+          .catch(error => console.error(error))
+  }, 2000); // 120000 milliseconds = 2 minutes
+</script> {% endcomment %}
+
+</body>
+</html>

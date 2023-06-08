@@ -1,0 +1,215 @@
+{% extends 'base/main.html' %}
+{% load static %}
+{% block content %}
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid" style="color:#002533;">
+    <div class="row mb-2" style="padding:5px;">
+      <div class="col-sm-6">
+        <h1>Profile</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active"><b>User Profile</b></li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-5">
+
+          <!-- Profile Image -->
+          <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+              <div class="text-center">
+                <img class="profile-user-img img-fluid img-circle"
+                     src="{{ request.user.profileImage.url }}"
+                     alt="User profile picture">
+              </div>
+
+              <h3 class="profile-username text-center">{{myCredential.first_name}} - {{myCredential.last_name}}</h3>
+
+              <p class="text-muted text-center">{{ myProfileInfo.branch.name }} -> {{ my_role }}</p>
+
+              <ul class="list-group list-group-unbordered mb-3">
+                <li class="list-group-item">
+                  <b>Role</b> <a class="float-right" style="color: white;">{{ my_role }}</a>
+                </li>
+              </ul>
+
+              <a href="#" class="btn btn-block" style="background-color: #8B0000; color:white;"><b>More ..</b></a>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+
+          <!-- About Me Box -->
+          <div class="card">
+            <div class="card-header" style="background-color: #8B0000;">
+              <h3 class="card-title">About Me</h3>
+            </div>
+            <!-- /.card-header -->
+
+            <div class="card-body">
+              <strong><i class="fas fa-user mr-1"></i>My Credentials</strong>
+
+              <p class="text-muted">
+                <b>Full Name:</b> {{myCredential.first_name}} {{myCredential.last_name}}</br>
+                <b>Email Address:</b> {{myCredential.email}}</br>
+              </p>
+
+              <hr>
+
+              <strong><i class="fas fa-phone mr-1"></i>Communications</strong>
+
+              <p class="text-muted">
+                <b>Phone Number:</b> {{ myProfileInfo.phone_number }}</br>
+                <b>Nida Number:</b> {{ myProfileInfo.nida_no }}.
+              </p>
+
+              <hr>
+
+              <strong><i class="fas fa-transgender mr-1"></i>Marital Status</strong>
+
+              <p class="text-muted">
+                <span class="tag tag-danger"><b>Sex:</b>
+                {% if myProfileInfo.gender == "1" %}
+                Male
+                {% endif %}
+                {% if myProfileInfo.gender == "2" %}
+                Female
+                {% endif %}
+                </span></br>
+                <span class="tag tag-success"><b>Date of birth:</b> {{ myProfileInfo.dob|date:"d/m/Y" }}</span>
+              </p>
+
+              <div class="dropdown-divider"></div>
+              <a href="{% url 'logout_url' %}" class="dropdown-item">
+                <i class="fas fa-sign-out-alt mr-2"></i> sign-out
+                <span class="float-right text-muted text-sm">
+                  <i class="fas fa-star-half-alt mr-2" style="color:red;"></i>
+                </span>
+              </a>
+              
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-7">
+          <div class="card">
+            <div class="card-header p-2">
+              <ul class="nav nav-pills">
+                <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Update-profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="#profilepic" data-toggle="tab">my-profile pic</a></li>
+              </ul>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+              <div class="tab-content">
+                <div class="tab-pane" id="settings">
+                  
+                  <form action="{% url 'updateProfile_url' %}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                      <label for="inputName" class="col-sm-2 col-form-label">First Name</label>
+                      <div class="col-sm-10">
+                        <input type="text" name="FirstName" class="form-control" id="inputName" placeholder="Aman" value="{{myCredential.first_name}}" required>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="inputName" class="col-sm-2 col-form-label">Last Name</label>
+                      <div class="col-sm-10">
+                        <input type="text" name="LastName" class="form-control" id="inputName" placeholder="brone" value="{{myCredential.last_name}}" required>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="inputName" class="col-sm-2 col-form-label">Phone Number</label>
+                      <div class="col-sm-10">
+                        <input type="text" name="PhoneNumber" class="form-control" id="inputName" value="{{myProfileInfo.phone_number}}" placeholder="0620141577" required>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="inputName" class="col-sm-2 col-form-label">Nida Number</label>
+                      <div class="col-sm-10">
+                        <input type="text" name="NidaNumber" class="form-control" id="inputName" value="{{myProfileInfo.nida_no}}" placeholder="19980625229966775533">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="inputName" class="col-sm-2 col-form-label">Date of birth</label>
+                      <div class="col-sm-10">  
+                        <input type="date" name="Bod" value="{{myProfileInfo.dob|date:'Y-m-d'}}" class="form-control" id="inputName" required>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="inputName" class="col-sm-2 col-form-label">Address</label>
+                      <div class="col-sm-10">
+                        <input type="text" name="Address" class="form-control" id="inputName" value="{{myProfileInfo.address}}" placeholder="P O Box 200, DSM" required>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="inputName" class="col-sm-2 col-form-label">Gender</label>
+                      <select class="col-sm-10" id="selectGender" name="genderValue">
+                        {% if myProfileInfo.gender == "1" %}
+                        <option value="1">Male</option>
+                        {% elif myProfileInfo.gender == "2" %}
+                        <option value="2">Female</option>
+                        {% else %}
+                        <option value="0">select gender</option>
+                        <option value="1">Male</option>
+                        <option value="2">Female</option>
+                        {% endif %}
+                      </select>
+                    </div>
+                    <div class="form-group row">
+                      <div class="offset-sm-2 col-sm-10">
+                        <button type="submit" class="btn btn-secondary">update</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.tab-pane -->
+
+                <div class="tab-pane" id="profilepic">
+                  
+                  <form action="{% url 'updateProfilePic_url' %}" method="POST" enctype="multipart/form-data"  class="form-horizontal">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                      <label for="inputName" class="col-sm-2 col-form-label">Profile picture</label>
+                      <div class="col-sm-10">
+                        <input type="file" name="profilePic" id="profile_picture" onchange="checkFileSize()" accept="image/png,image/jpg,image/jpeg" class="form-control" id="inputName" required>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class="offset-sm-2 col-sm-10">
+                        <button type="submit" class="btn btn-secondary">save</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.tab-pane -->
+              </div>
+              <!-- /.tab-content -->
+            </div><!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+
+  {% endblock %}

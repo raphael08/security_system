@@ -1,0 +1,274 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid" style="color:#0f0f0f;">
+    <div class="row mb-2" style="padding:5px;">
+      <div class="col-sm-6">
+        <h1>Users</h1>
+      </div>  
+      <div class="col-sm-3">
+        <a class="btn btn-secondary pull-right" href="#" data-toggle="modal" data-target="#modal-primary">Add User</a>
+      </div>
+      <div class="col-sm-3">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active"><b>System users</b></li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content margtop">
+<div class="container-fluid">
+
+<div class="card" style="background:#343a40;">
+    <!-- /.card-header -->
+    <div class="card-body">
+      <table id="example1" class="table table-sm table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Full name</th>
+          <th>Email</th>
+          <th>Phone number(s)</th>
+          <th>Branch</th>
+          <th>Gender</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for allUser in userListData %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ allUser.user.first_name }} {{ allUser.user.last_name }}</td>
+          <td>{{ allUser.user.email }}</td>
+          <td>{{ allUser.phone_number }}</td>
+          <td>{{ allUser.branch.name }}</td>
+          <td>
+            {% if allUser.gender == "1" %}
+            Male
+            {% elif allUser.gender == "2" %}
+            Female
+            {% else %}
+            -
+            {% endif %}
+          </td>
+          <td>
+            {% if allUser.user.is_active %}
+            <a class="fa fa-check btn-sm btn-success" title="block" href="{% url 'userStatusView_url' %}?userStatus_id={{allUser.user.id}}"></a>
+            {% else %}
+            <a class="fas fa-unlock btn-sm btn-danger" title="unblock" href="{% url 'userStatusView_url' %}?userStatus_id={{allUser.user.id}}"></a>
+            {% endif %}
+            <a class="fa fa-edit btn-sm btn-secondary" title="edit" href="#" data-toggle="modal" data-target="#modal-secondary{{allUser.id}}"></a>
+            {% if not allUser.is_approved %}
+            <a class="fa fa-check btn-sm btn-warning" title="approve" href="{% url 'approveUser_url' %}?approveProfile_id={{allUser.id}}"></a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+  
+        </tbody>
+        <tfoot>
+        <tr>
+          <th>#</th>
+          <th>Full name</th>
+          <th>Email</th>
+          <th>Phone number(s)</th>
+          <th>Branch</th>
+          <th>Gender</th>
+          <th>Actions</th>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+</div>
+
+
+<div class="modal fade" id="modal-primary">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Create a new user.</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'createUser_url' %}" method="POST">
+                {% csrf_token %}
+
+                <div class="input-group mb-3">
+                  <input type="text" name="Username" class="form-control" placeholder="username" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-user"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <input type="email" name="Email" class="form-control" placeholder="Email" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-envelope"></span>
+                    </div>
+                  </div>
+                </div>
+                {% comment %} <div class="input-group mb-3">
+                  <select name="branchId" class="form-control" required>
+                    {% for branch in branchObjectData %}
+                    <option value="{{branch.id}}">{{ branch.name }}</option>
+                    {% endfor %}
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-building"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <select name="RoleId" class="form-control">
+                      {% for roleInstance in roleInstanceData %}
+                      <option value="{{ roleInstance.id }}">{{ roleInstance.name }}</option>
+                      {% endfor %}
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-list"></span>
+                    </div>
+                  </div>
+                </div> {% endcomment %}
+                <div class="input-group mb-3">
+                  <input type="password" name="Password" class="form-control" placeholder="Password" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <input type="password" name="ConfirmPassword" class="form-control" placeholder="Retype password" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-light">Save changes</button>
+                  </div>
+              </form>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  {% for allUser in userListData %}
+  <div class="modal fade" id="modal-secondary{{allUser.id}}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Update user.</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="input-group mb-3">
+            <p class="form-control">CreatedBy: <i>{{allUser.createdBy}},@{{ allUser.createdAt|date:"d/m/Y" }}</i></p>
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="far fa-clock"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="input-group mb-3">
+              <p class="form-control">updatedBy: <i>{{allUser.updatedBy}},@{{ allUser.updatedAt|date:"d/m/Y" }}</i></p>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="far fa-clock"></span>
+                  </div>
+                </div>
+              </div>
+            <form action="{% url 'updateUser_url' %}" method="POST">
+                {% csrf_token %}
+
+                <input type="hidden" name="profileId" class="form-control" value="{{allUser.id}}" required>
+                <div class="input-group mb-3">
+                  <input type="text" name="Username" class="form-control" placeholder="Employ Number" value="{{allUser.user.username}}" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-user"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <input type="email" name="Email" class="form-control" placeholder="Email" value="{{allUser.user.email}}" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-envelope"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <select name="workshopId" class="form-control">
+                    {% for branch in branchObjectData %}
+                    {% if allUser.branch == branch %}
+                    <option value="{{branch.id}}" selected>{{branch.name}}</option> 
+                    {% else %}
+                    <option value="{{branch.id}}">{{branch.name}}</option> 
+                    {% endif %}
+                    {% endfor %}
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-building"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <select name="RoleId" class="form-control">
+                      {% for roleInstance in roleInstanceData %}
+                      {% if roleInstance in allUser.user.groups.all %}
+                      <option value="{{ roleInstance.id }}" selected>{{ roleInstance.name }}</option>
+                      {% else %}
+                      <option value="{{ roleInstance.id }}">{{ roleInstance.name }}</option>
+                      {% endif %}
+                      {% endfor %}
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-list"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-light">Save changes</button>
+                  </div>
+              </form>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+  {% endfor %}
+
+{% endblock content %}

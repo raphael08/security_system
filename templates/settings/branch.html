@@ -1,0 +1,168 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid" style="color:#002533;">
+    <div class="row mb-2" style="padding:5px;">
+      <div class="col-sm-6">
+        <h1>Branches</h1>
+      </div>  
+      <div class="col-sm-4">
+        <a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#modal-branch">Add Branch</a>
+      </div>
+      <div class="col-sm-2">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active"><b>Settings</b></li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content margtop">
+<div class="container-fluid">
+
+    <div class="row">
+        {% comment %} <div class="col-md-2">
+        </div> {% endcomment %}
+        <!-- /.col -->
+
+        <div class="col-md-12">
+          <!-- DIRECT CHAT -->
+          <div class="card direct-chat direct-chat-warning">
+            <div class="card-header">
+              <h3 class="card-title">Company Branches</h3>
+
+              <div class="card-tools">
+                <span title="3 New Messages" class="badge badge-warning">{{ totalCategoryOne }}</span>
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="card-body p-0">
+                    <div class="table-responsive table-sm">
+                      <table class="table m-0">
+                        <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Name</th>
+                          <th>Region</th>
+                          <th>Branch Email</th>
+                          <th>createdBy</th>
+                          <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for branch in branchInstance %}
+                        <tr>
+                          <td>{{ forloop.counter }}</td>
+                          <td>{{ branch.name }}</td>
+                          <td>{{ branch.region }}</td>
+                          <td>{{ branch.branchEmail }}</td>
+                          <td>{{ branch.createdBy }}</td>
+                          <td>
+                            {% if branch.status %}
+                            <a class="fa fa-check btn-sm btn-success" title="deactivate" href="{% url 'branchStatus_url' %}?approveBranch_id={{branch.id}}"></a>
+                            {% else %}
+                            <a class="fas fa-times btn-sm btn-success" title="activate" href="{% url 'branchStatus_url' %}?approveBranch_id={{branch.id}}"></a>
+                            {% endif %}
+                            <a class="fa fa-trash btn-sm btn-danger" title="delete" href="{% url 'deleteBranch_url' branch.id %}"></a>
+                          </td>
+                        </tr>
+                        {% endfor %}
+
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                  </div>
+                  <!-- /.card-body -->
+            </div>
+
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <form action="#" method="POST">
+                {% csrf_token %}
+                <div class="input-group">
+                  <input type="text" name="message" placeholder="Type to search workshop ....." class="form-control">
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-success"><b>search</b></button>
+                  </span>
+                </div>
+              </form>
+            </div>
+            <!-- /.card-footer-->
+          </div>
+          <!--/.direct-chat -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+    <!--modal for creating asset category.....-->
+    <div class="modal fade" id="modal-branch">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Create Branch.</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'createBranch_url' %}" method="POST">
+                    {% csrf_token %}
+    
+                    <div class="input-group mb-3">
+                      <input type="text" name="Name" class="form-control" placeholder="Branch name" required>
+                      <div class="input-group-append">
+                        <div class="input-group-text">
+                          <span class="fas fa-building"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" name="Region" class="form-control" placeholder="Dar es salaam" required>
+                        <div class="input-group-append">
+                          <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="number" name="BranchEmail" class="form-control" placeholder="nitbranch2023@gmail.com" required>
+                        <div class="input-group-append">
+                          <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                          </div>
+                        </div>
+                    </div>
+    
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-outline-light">Save changes</button>
+                      </div>
+                  </form>
+            </div>
+        </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+      <!-- /.modal -->
+
+</div>
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,243 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid" style="color:#002533;">
+    <div class="row mb-2" style="padding:5px;">
+      <div class="col-sm-7">
+        <h1>Device</h1>
+      </div>  
+      <div class="col-sm-2">
+        <a class="btn btn-secondary pull-right" href="#" data-toggle="modal" data-target="#modal-addFridge">Add Fridge</a>
+      </div>
+      <div class="col-sm-3">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active"><b>Device list.</b></li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content margtop">
+<div class="container-fluid">
+
+<div class="card" style="background:#343a40;">
+    <!-- /.card-header -->
+    <div class="card-body">
+      <table id="example1" class="table table-sm table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>#</th>
+         
+          <th>Device number</th>
+          <th>pressed Status</th>
+          <th>Last pressed</th>
+          
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for fod in fod %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+        
+          <td>{{ fod.deviceId }}</td>
+       
+          <td>
+            {% if fod.status %}
+            <i class="fa fa-check" title="approve" href="#"></i>
+            {% else %}
+            <i class="fa fa-times" title="approve" href="#"></i>
+            {% endif %}
+          </td>
+          <td>{{ fod.updatedAt }}</td>
+          <td>
+            <a class="fa fa-edit btn-sm btn-secondary" title="edit" href="#" data-toggle="modal" data-target="#modal-UpdateFridge{{fod.id}}"></a>
+            {% if not fod.isAssigned %}
+            <a class="fa fa-arrow-right btn-sm" style="background-color:#8B0000;" title="assign user+fridge" href="#" data-toggle="modal" data-target="#modal-assignUserFridge{{fod.id}}"></a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+  
+        </tbody>
+        <tfoot>
+        <tr>
+          <th>#</th>
+         
+          <th>Device number</th>
+          <th>pressed Status</th>
+          <th>Last pressed</th>
+          
+          <th>Actions</th>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+</div>
+
+
+<div class="modal fade" id="modal-addFridge">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Create a new Fridge.</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'createDevice' %}" method="POST">
+                {% csrf_token %}
+
+                <div class="input-group mb-3">
+                  <input type="text" name="device" class="form-control" placeholder="device number.. e.g. jp001" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-building"></span>
+                    </div>
+                  </div>
+                </div>
+                
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-light">Save changes</button>
+                  </div>
+              </form>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  {% for fod in fod %}
+  <div class="modal fade" id="modal-UpdateFridge{{fod.id}}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Update Fridge.</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="input-group mb-3">
+            <p class="form-control">Fridge Number: &nbsp;&nbsp;&nbsp;&nbsp;<i>{{fod.fridgeNumber}}</i></p>
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="far fa-building"></span>
+                </div>
+              </div>
+            </div>
+
+            <form action="{% url 'updateDevice' %}" method="POST">
+                {% csrf_token %}
+
+                <input type="hidden" name="FridgeId" class="form-control" value="{{fod.id}}" required>
+                <div class="input-group mb-3">
+                    <select name="branchId" class="form-control" required>
+                      {% for branch in bo %}
+                      {% if fod.branch == branch %}
+                      <option value="{{branch.id}}" selected>{{ branch.name }}</option>
+                      {% else %}
+                      <option value="{{branch.id}}">{{ branch.name }}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select>
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <span class="fas fa-building"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-group mb-3">
+                    <input type="number" name="Capacity" class="form-control" value="{{fod.capacity}}" required>
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <span class="fas fa-building"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-light">update fridge</button>
+                  </div>
+              </form>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+  {% endfor %}
+
+
+  {% for fod in fo %}
+  <div class="modal fade" id="modal-assignUserFridge{{fod.id}}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Assign user fridge</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="input-group mb-3">
+            <p class="form-control">Fridge Number: &nbsp;&nbsp;&nbsp;&nbsp;<i>{{fod.fridgeNumber}}</i></p>
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="far fa-building"></span>
+                </div>
+              </div>
+            </div>
+
+            {% comment %} <form action="{% url 'userFridge_url' %}" method="POST">
+                {% csrf_token %}
+
+                <input type="hidden" name="FridgeId" class="form-control" value="{{fod.id}}" required>
+                <div class="input-group mb-3">
+                    <select name="UserId" class="form-control" required>
+                      {% for usero in uo %}
+                      <option value="{{usero.id}}">{{ usero.email }}</option>
+                      {% endfor %}
+                    </select>
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <span class="fas fa-building"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-light">user + fridge</button>
+                  </div>
+              </form> {% endcomment %}
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+  {% endfor %}
+
+
+{% endblock content %}

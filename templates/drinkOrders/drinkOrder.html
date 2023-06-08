@@ -1,0 +1,121 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid" style="color:#002533;">
+    <div class="row mb-2" style="padding:5px;">
+      <div class="col-sm-7">
+        <h1>Order Drinks</h1>
+      </div>  
+      <div class="col-sm-2">
+        <a class="btn btn-secondary pull-right" href="#" data-toggle="modal" data-target="#modal-addFridge">Order Here</a>
+      </div>
+      <div class="col-sm-3">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active"><b>Drink List.</b></li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content margtop">
+<div class="container-fluid">
+
+<div class="card" style="background:#343a40;">
+    <!-- /.card-header -->
+    <div class="card-body">
+      <table id="example1" class="table table-sm table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Fridge Number</th>
+          <th>Order Details</th>
+          <th>date Order</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for oid in oi %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ oid.userFridge.fridge.fridgeNumber }}</td>
+          <td>{{ oid.orderDetails }}</td>
+          <td>{{ oid.createdAt | date:'d-m-Y' }}</td>
+          <td>
+            <span class="btn-sm btn-primary" title="sent">sent</span>
+          </td>
+        </tr>
+        {% endfor %}
+  
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>#</th>
+            <th>Fridge Number</th>
+            <th>Order Details</th>
+            <th>date Order</th>
+            <th>Actions</th>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+</div>
+
+
+<div class="modal fade" id="modal-addFridge">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Make Order Here</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'makeDOrder_url' %}" method="POST">
+                {% csrf_token %}
+
+                <div class="input-group mb-3">
+                  <select name="userFridgeId" class="form-control" required>
+                    {% for frdg in dt %}
+                    <option value="{{frdg.id}}">{{ frdg.fridge.fridgeNumber }}</option>
+                    {% endfor %}
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-building"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                    <textarea class="form-control" rows="2" name="OrderDescription" placeholder="Order descriptions.." required></textarea>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                          <span class="fas fa-list"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-light">Request</button>
+                  </div>
+              </form>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+{% endblock content %}

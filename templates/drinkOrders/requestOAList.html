@@ -1,0 +1,126 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid" style="color:#002533;">
+    <div class="row mb-2" style="padding:5px;">
+      <div class="col-sm-7">
+        <h1>Order Drinks</h1>
+      </div>  
+      <div class="col-sm-2">
+        ..
+      </div>
+      <div class="col-sm-3">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active"><b>approved Orders</b></li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content margtop">
+<div class="container-fluid">
+
+  <div class="card" style="background:#343a40;">
+    <!-- /.card-header -->
+    <div class="card-body">
+      <table id="example1" class="table table-sm table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Fridge Number</th>
+          <th>Order receive Details</th>
+          <th>Confirmed At</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for oid in oi %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ oid.orderR.userFridge.fridge.fridgeNumber }}</td>
+          <td>{{ oid.OrderReceiveDesc }}</td>
+          <td>{{ oid.createdAt | date:'d-m-Y' }}</td>
+          <td>
+            <span class="btn-sm btn-primary" title="sent">sent</span>
+          </td>
+        </tr>
+        {% endfor %}
+  
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>#</th>
+            <th>Fridge Number</th>
+            <th>Order receive Details</th>
+            <th>Confirmed At</th>
+            <th>Actions</th>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+</div>
+</div>
+</div>
+
+
+
+  {% for fod in fo %}
+  <div class="modal fade" id="modal-UpdateFridge{{fod.id}}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Approve Drink Order.</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="input-group mb-3">
+            <p class="form-control">Fridge Number: &nbsp;&nbsp;&nbsp;&nbsp;<i>{{fod.fridgeNumber}}</i></p>
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="far fa-building"></span>
+                </div>
+              </div>
+            </div>
+
+            <form action="#" method="POST">
+                {% csrf_token %}
+
+                <input type="hidden" name="OrderId" class="form-control" value="{{fod.id}}" required>
+                <div class="input-group mb-3">
+                  <textarea class="form-control" rows="2" name="ApproveDescription" placeholder="Order approve descriptions.." required></textarea>
+                  <div class="input-group-append">
+                      <div class="input-group-text">
+                        <span class="fas fa-list"></span>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-light">Approve</button>
+                  </div>
+              </form>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+  {% endfor %}
+
+
+{% endblock content %}

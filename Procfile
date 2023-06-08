@@ -1,0 +1,1 @@
+web gunicorn fridgeProject.wsgi:application --log-file -
