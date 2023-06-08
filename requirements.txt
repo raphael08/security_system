@@ -40,7 +40,7 @@ psycopg2==2.9.6
 # Pygments @ file:///home/conda/feedstock_root/build_artifacts/pygments_1681904169130/work
 # python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1626286286081/work
 pytz==2023.3
-pywin32==303
+pywin32
 # pyzmq @ file:///D:/bld/pyzmq_1656183658660/work
 ratelim==0.1.6
 requests==2.30.0
