@@ -98,7 +98,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'fridgeProject.wsgi.application'
 
-
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
